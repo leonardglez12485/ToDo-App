@@ -1,7 +1,10 @@
+using Azure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Aplication.DTOs.Person;
 using ToDoApp.Aplication.Persons.PersonCreate;
+using ToDoApp.Aplication.Persons.PersonGetMany;
+using ToDoApp.Application.Core;
 using static ToDoApp.Aplication.Persons.PersonCreate.PersonCreateCommand;
 
 namespace ToDoApp.API.Controllers;
@@ -15,6 +18,25 @@ public class PersonController : ControllerBase
     public PersonController(ISender sender)
     {
         _sender = sender;
+    }
+    [HttpGet]
+    public async Task<ActionResult<PageList<PersonResponse>>> GetMany(
+        [FromQuery] PersonGetManyRequest? personGetManyRequest,
+        CancellationToken cancellationToken = default
+        )
+    {
+        var query = new PersonGetManyQuery.PersonGetMenyQueryRequest
+        {
+            personGetManyRequest = personGetManyRequest
+        };
+        var response = await _sender.Send(query, cancellationToken);
+        
+        if (response is null)
+        {
+            return NotFound("No persons found.");
+        }
+        
+        return Ok(response);
     }
 
     [HttpPost]

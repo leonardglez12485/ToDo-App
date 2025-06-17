@@ -77,9 +77,9 @@ public class TaskGestManyQuery
             var response = _mapper.Map<List<TaskResponse>>(items);
 
             var pagedResponse = new PageList<TaskResponse>(
-                totalCount,
                 request.taskGetManyRequest!.PageNumber,
                 request.taskGetManyRequest.PageSize,
+                totalCount,
                 response
             );
             return pagedResponse;        

@@ -1,0 +1,6 @@
+SELECT TOP (1000) [Id]
+      ,[FirstName]
+      ,[LastName]
+      ,[Email]
+      ,[PhoneNumber]
+  FROM [ToDoDb].[dbo].[persons]

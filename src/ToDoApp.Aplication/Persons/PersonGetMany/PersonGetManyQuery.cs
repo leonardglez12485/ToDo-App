@@ -88,9 +88,9 @@ public class PersonGetManyQuery
 
             var response = _mapper.Map<List<PersonResponse>>(items);
             var pagedResponse = new PageList<PersonResponse>(
-                totalCount,
                 request.personGetManyRequest!.PageNumber,
                 request.personGetManyRequest.PageSize,
+                totalCount,
                 response
             );
             return pagedResponse; 
