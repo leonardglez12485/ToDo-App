@@ -2,7 +2,7 @@ using ToDoApp.Domain;
 
 namespace ToDoApp.Aplication.DTOs.Task;
 
-public class TaskResponse
+public record TaskResponse
 {
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
@@ -10,16 +10,6 @@ public class TaskResponse
     public string Status { get; set; } = CustomStatus.Open;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CompletedAt { get; set; }
-    public string PersonId { get; set; }
-
-
-    public TaskResponse()
-    {
-        Title = string.Empty;
-        Description = string.Empty;
-        Status = CustomStatus.Open;
-        CreatedAt = DateTime.UtcNow;
-        PersonId = string.Empty;
-    }
+    public string? PersonId { get; set; }
 }
 

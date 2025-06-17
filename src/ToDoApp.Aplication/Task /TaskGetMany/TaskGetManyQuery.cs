@@ -3,12 +3,12 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.Aplication.DTOs.Task;
-using ToDoApp.Application.Task;
+using ToDoApp.Application.Core;
 using ToDoApp.Domain;
 using ToDoApp.Infrastructure.Presistence;
 
 
-namespace ToDoApp.Application.Core;
+namespace ToDoApp.Application.Task.TaskGestMany;
 
 public class TaskGestManyQuery
 {
@@ -30,7 +30,10 @@ public class TaskGestManyQuery
             _mapper = mapper;
         }
 
-        public async Task<PageList<TaskResponse>> Handle(TaskGetManyQueryRequest request, CancellationToken cancellationToken)
+        public async Task<PageList<TaskResponse>> Handle(
+            TaskGetManyQueryRequest request,
+            CancellationToken cancellationToken
+            )
         {
             IQueryable<Taske> querable = _context.Taske!
                 .Include(c => c.Person)
