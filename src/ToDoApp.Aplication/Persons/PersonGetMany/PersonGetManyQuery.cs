@@ -14,13 +14,13 @@ public class PersonGetManyQuery
 {
 
     public record PersonGetMenyQueryRequest
-        : IRequest<PageList<Personresponse>>
+        : IRequest<PageList<PersonResponse>>
     {
         public PersonGetManyRequest? personGetManyRequest { get; set; }
     }
 
     internal class PersonGetManyRequestHandler
-        : IRequestHandler<PersonGetMenyQueryRequest, PageList<Personresponse>>
+        : IRequestHandler<PersonGetMenyQueryRequest, PageList<PersonResponse>>
     {
          private readonly ToDoDbContext _context;
         private readonly IMapper _mapper;
@@ -31,7 +31,7 @@ public class PersonGetManyQuery
             _mapper = mapper;
         }
 
-        public async Task<PageList<Personresponse>> Handle(
+        public async Task<PageList<PersonResponse>> Handle(
             PersonGetMenyQueryRequest request,
             CancellationToken cancellationToken
             )
@@ -86,8 +86,8 @@ public class PersonGetManyQuery
                 .Take(request.personGetManyRequest.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var response = _mapper.Map<List<Personresponse>>(items);
-            var pagedResponse = new PageList<Personresponse>(
+            var response = _mapper.Map<List<PersonResponse>>(items);
+            var pagedResponse = new PageList<PersonResponse>(
                 totalCount,
                 request.personGetManyRequest!.PageNumber,
                 request.personGetManyRequest.PageSize,

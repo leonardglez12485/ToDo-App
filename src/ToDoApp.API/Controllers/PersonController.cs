@@ -18,20 +18,19 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<PersonResponse>> CreatePerson([FromBody] PersonCreateRequest personCreateRequest)
+    public async Task<ActionResult<PersonResponse>> CreatePerson(
+        [FromBody] PersonCreateRequest personCreateRequest,
+        CancellationToken cancellationToken = default
+        )
     {
-        if (personCreateRequest is null)
-        {
-            return BadRequest("Person create request cannot be null");
-        }
         var command = new PersonCreateCommandRequest(personCreateRequest);
-        var response = await _sender.Send(command);
-        if (response is null)
-        {
-            return BadRequest("Failed to create person.");
-        }
-        // return response;
-        return CreatedAtAction(nameof(CreatePerson), new { id = response.Id }, response);
+        return await _sender.Send(command, cancellationToken);
+    //     if (response is null)
+    //     {
+    //         return BadRequest("Failed to create person.");
+    //     }
+    //     // return response;
+    //     return CreatedAtAction(nameof(CreatePerson), new { id = response.Id }, response);
     }
         
 }

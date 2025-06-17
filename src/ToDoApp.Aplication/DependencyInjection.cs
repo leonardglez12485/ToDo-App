@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using ToDoApp.Aplication.Core;
 
 namespace ToDoApp.Aplication;
 public static class DependencyInjection
@@ -14,7 +15,7 @@ public static class DependencyInjection
               });
         //services.AddValidatorsFromAssemblies([typeof(DependencyInjection).Assembly]);
         //services.AddValidatorsFromAssemblyContaining<CursoCreateCommand>();
-        //services.AddAutoMapper(typeof(MappingProfile).Assembly);
+        services.AddAutoMapper(typeof(MappingProfile).Assembly);
         return services;
     }
 }

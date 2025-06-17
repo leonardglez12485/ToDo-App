@@ -15,16 +15,16 @@ public class TaskController : ControllerBase
         _sender = sender;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Task>>> GetAllTask()
-    {
+    // [HttpGet]
+    // public async Task<ActionResult<IEnumerable<Task>>> GetAllTask()
+    // {
 
-    }
+    // }
 
-    [HttpPost]
-    public async Task<ActionResult<Task>> CreateTask([FromBody] CreateTaskDto createTaskDto)
-    {
+    // [HttpPost]
+    // public async Task<ActionResult<Task>> CreateTask([FromBody] CreateTaskDto createTaskDto)
+    // {
         
-    }
+    // }
 }
    
