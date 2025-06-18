@@ -1,9 +1,10 @@
-using Azure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Aplication.DTOs.Person;
 using ToDoApp.Aplication.Persons.PersonCreate;
+using ToDoApp.Aplication.Persons.PersonDelete;
 using ToDoApp.Aplication.Persons.PersonGetMany;
+using ToDoApp.Aplication.Persons.PersonGetOne;
 using ToDoApp.Application.Core;
 using static ToDoApp.Aplication.Persons.PersonCreate.PersonCreateCommand;
 
@@ -30,12 +31,12 @@ public class PersonController : ControllerBase
             personGetManyRequest = personGetManyRequest
         };
         var response = await _sender.Send(query, cancellationToken);
-        
+
         if (response is null)
         {
             return NotFound("No persons found.");
         }
-        
+
         return Ok(response);
     }
 
@@ -47,12 +48,47 @@ public class PersonController : ControllerBase
     {
         var command = new PersonCreateCommandRequest(personCreateRequest);
         return await _sender.Send(command, cancellationToken);
-    //     if (response is null)
-    //     {
-    //         return BadRequest("Failed to create person.");
-    //     }
-    //     // return response;
-    //     return CreatedAtAction(nameof(CreatePerson), new { id = response.Id }, response);
+        //     if (response is null)
+        //     {
+        //         return BadRequest("Failed to create person.");
+        //     }
+        //     // return response;
+        //     return CreatedAtAction(nameof(CreatePerson), new { id = response.Id }, response);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<PersonResponse>> DeletePerson(
+        Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var command = new PersonDeleteCommandRequest(id);
+        var response = await _sender.Send(command, cancellationToken);
+        if (response is null)
+        {
+            return NotFound($"Person with ID {id} not found.");
+        }
+        return Ok(response);   
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<PersonResponse>> GetPersonById(
+         Guid id,
+        CancellationToken cancellationToken = default
+        )
+    {
+        var personGetOneRequest = new PersonGetOneRequest
+        {
+            Id = id
+        };
+        var query = new PersonGetOneQueryRequest(personGetOneRequest);
+        var response = await _sender.Send(query, cancellationToken);
+        if (response is null)
+        {
+            return NotFound($"Person with ID {id} not found.");
+        }
+        return Ok(response);
+    }
+
         
 }
