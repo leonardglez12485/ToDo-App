@@ -1,3 +1,4 @@
+using System.Drawing;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Aplication.DTOs.Person;
@@ -5,6 +6,7 @@ using ToDoApp.Aplication.Persons.PersonCreate;
 using ToDoApp.Aplication.Persons.PersonDelete;
 using ToDoApp.Aplication.Persons.PersonGetMany;
 using ToDoApp.Aplication.Persons.PersonGetOne;
+using ToDoApp.Aplication.Persons.PersonUpdate;
 using ToDoApp.Application.Core;
 using static ToDoApp.Aplication.Persons.PersonCreate.PersonCreateCommand;
 
@@ -54,6 +56,22 @@ public class PersonController : ControllerBase
         //     }
         //     // return response;
         //     return CreatedAtAction(nameof(CreatePerson), new { id = response.Id }, response);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<PersonResponse>> UpdatePerson(
+        [FromBody] PersonUpdateRequest personUpdateRequest,
+        Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var command = new PersonUpdateCommandRequest(personUpdateRequest, id);
+        var updatet = await _sender.Send(command, cancellationToken);
+        if (updatet is null)
+        {
+            return NotFound($"Person with ID {id} not found.");
+        }
+            return Ok(updatet);
     }
 
     [HttpDelete("{id:guid}")]
