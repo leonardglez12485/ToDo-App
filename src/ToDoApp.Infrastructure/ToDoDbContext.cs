@@ -24,7 +24,8 @@ public class ToDoDbContext : DbContext
         modelBuilder.Entity<Taske>()
         .HasOne(t => t.Person)
         .WithMany(p => p.Taske)
-        .HasForeignKey(t => t.PersonId);
+        .HasForeignKey(t => t.PersonId)
+         .IsRequired(false); 
 
     }
 }
