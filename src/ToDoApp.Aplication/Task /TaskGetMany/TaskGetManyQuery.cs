@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ToDoApp.Aplication.Core;
 using ToDoApp.Aplication.DTOs.Task;
 using ToDoApp.Application.Core;
 using ToDoApp.Domain;

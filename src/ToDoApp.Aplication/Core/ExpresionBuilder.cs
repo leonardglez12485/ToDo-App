@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace ToDoApp.Application.Core;
+namespace ToDoApp.Aplication.Core;
 
 public static class ExpressionBuilder
     {
