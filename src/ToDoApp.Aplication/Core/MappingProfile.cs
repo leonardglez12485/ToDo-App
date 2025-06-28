@@ -19,6 +19,7 @@ public class MappingProfile : Profile
         CreateMap<PersonCreateRequest, Person>();
         CreateMap<PersonUpdateRequest, Person>()
             .ForMember(dest => dest.Id, opt => opt.Ignore()); // Ignore Id to prevent overwriting during update
-        CreateMap<Person, PersonResponse>();
+        CreateMap<Person, PersonResponse>()
+            .ForMember(dest => dest.Tasks, opt => opt.MapFrom(src => src.Taske));
     }
 }

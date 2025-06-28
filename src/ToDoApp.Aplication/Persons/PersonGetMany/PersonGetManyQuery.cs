@@ -61,6 +61,19 @@ public class PersonGetManyQuery
                 predicate = predicate.And(c =>
                    c.PhoneNumber!.Contains(request.personGetManyRequest.PhoneNumber.ToLower()));
             }
+            
+            // Opcional: Filtrar por personas que tienen tareas
+            // Descomenta las siguientes líneas si quieres esta funcionalidad
+            /*
+            if (request.personGetManyRequest?.HasTasks == true)
+            {
+                predicate = predicate.And(c => c.Taske.Any());
+            }
+            else if (request.personGetManyRequest?.HasTasks == false)
+            {
+                predicate = predicate.And(c => !c.Taske.Any());
+            }
+            */
             if (!string.IsNullOrEmpty(request.personGetManyRequest!.OrderBy))
             {
                 Expression<Func<Person, object>>? orderBySelector = request.personGetManyRequest.OrderBy!.ToLower() switch
@@ -69,6 +82,8 @@ public class PersonGetManyQuery
                     "lastname" => c => c.LastName!,
                     "email" => c => c.Email!,
                     "phonenumber" => c => c.PhoneNumber!,
+                    "tasks" => c => c.Taske.Count, // Ordenar por la cantidad de tareas
+                    "taskcount" => c => c.Taske.Count, // Alias alternativo
                     _ => c => c.FirstName!
                 };
                 bool ascending = request.personGetManyRequest.IsAscending.HasValue
@@ -80,7 +95,7 @@ public class PersonGetManyQuery
                     : querable.OrderByDescending(orderBySelector);
             }
 
-            querable = querable.Where(predicate);
+            querable = querable.Where(predicate).Include(c => c.Taske);
             var totalCount = await querable.CountAsync(cancellationToken);
             var items = await querable
                 .Skip(request.personGetManyRequest!.PageSize * (request.personGetManyRequest.PageNumber - 1))

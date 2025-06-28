@@ -6,6 +6,7 @@ using ToDoApp.Infrastructure.Presistence;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using ToDoApp.Aplication.DTOs.Person;
 
 namespace ToDoApp.Aplication.Task.TaskAsignPerson;
 
@@ -39,12 +40,19 @@ internal class TaskAsignPersonCommandHandler
         
         try
         {
+            // Solo asignar la persona a la tarea
             task.AssignPerson(request.taskAsignPersonRequest.PersonId, person);
-             _context.Taske!.Update(task);
-            var result = await _context.SaveChangesAsync();
+            
+            // Entity Framework manejará automáticamente la relación bidireccional
+            // No necesitas llamar person.AddTask() ni actualizar person explícitamente
+            _context.Taske!.Update(task);
+            
+            var result = await _context.SaveChangesAsync(cancellationToken);
             if (result <= 0)
                 throw new InvalidOperationException("Failed to assign person to task.");
-            
+
+            var p = _mapper.Map<PersonResponse>(person);
+            Console.WriteLine(p);
             return _mapper.Map<TaskResponse>(task);
         }
         catch (System.Exception)
